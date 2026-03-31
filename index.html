@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Página sencilla — Paleta accesible</title>
+		<link type="text/css"rel="stylesheet" href="CSS/footer.css">
+		<style>
+			.container { max-width: 900px; margin: 2rem auto; padding: 1rem; }
+			.header { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+			.header h1 { margin:0; font-size:1.25rem; }
+			.main { margin-top:1.25rem; line-height:1.6; }
+			.footer { margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(15,23,42,0.06); text-align:center; }
+			a.btn-primary { display:inline-block; text-decoration:none; }
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header class="header">
+				<h1>Roblox</h1> 
+				<nav>
+					<a class="btn-primary" href="#">Free Robux</a>
+				</nav>
+			</header>
+
+			<main class="main">
+				<section aria-labelledby="intro">
+					<h2 id="intro">Introducción</h2>
+					<p>WELCOME TO ROBLOX <strong>CSS/footer.css</strong> 67.</p>
+				</section>
+
+				<section aria-labelledby="demostracion">
+					<h2 id="demostracion">Demostración de colores</h2>
+					<p>Fondo: <span style="background:var(--bg);padding:0.15rem 0.4rem;border-radius:3px">var(--bg)</span></p>
+					<p>Texto de ejemplo: <span style="color:var(--text)">var(--text)</span></p>
+					<p>Botón primario: <a class="btn-primary" href="#">var(--primary)</a></p>
+				</section>
+			</main>
+
+			<footer class="footer">
+				<p>Pie de página con colores que cumplen contraste AA.</p>
+			</footer>
+		</div>
+
+		<!-- Elemento de audio base para reproducir al pulsar botones.
+		     Para usar: coloca tu archivo de sonido (p.ej. sounds/click.mp3) y descomenta o añade la ruta en el atributo src.
+		     Ejemplo: <audio id="click-sound" src="Sounds/click.mp3" preload="auto"></audio>
+		-->
+		<audio id="click-sound" preload="auto"></audio>
+
+		<script src="JS/footer.js"></script>
+	</body>
+</html>
+
+
