@@ -1,55 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Página sencilla — Paleta accesible</title>
-		<link type="text/css"rel="stylesheet" href="CSS/footer.css">
-		<style>
-			.container { max-width: 900px; margin: 2rem auto; padding: 1rem; }
-			.header { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
-			.header h1 { margin:0; font-size:1.25rem; }
-			.main { margin-top:1.25rem; line-height:1.6; }
-			.footer { margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(15,23,42,0.06); text-align:center; }
-			a.btn-primary { display:inline-block; text-decoration:none; }
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<header class="header">
-				<h1>Roblox</h1> 
-				<nav>
-					<a class="btn-primary" href="#">Free Robux</a>
-				</nav>
-			</header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Roblox Lab — Comunidad y Recursos</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Roblox Lab</h1> 
+            <div class="nav-controls">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+                <a class="btn-primary" href="#join">Unirse ahora</a>
+            </div>
+        </header>
 
-			<main class="main">
-				<section aria-labelledby="intro">
-					<h2 id="intro">Introducción</h2>
-					<p>WELCOME TO ROBLOX <strong>CSS/footer.css</strong> 67.</p>
-				</section>
+        <main>
+            <section class="hero">
+                <h2>Explora el metaverso como nunca antes</h2>
+                <p>Descubre trucos, guías de desarrollo en Luau y únete a la comunidad de creadores más grande de la red.</p>
+                <button class="btn-primary">Empezar a explorar</button>
+            </section>
 
-				<section aria-labelledby="demostracion">
-					<h2 id="demostracion">Demostración de colores</h2>
-					<p>Fondo: <span style="background:var(--bg);padding:0.15rem 0.4rem;border-radius:3px">var(--bg)</span></p>
-					<p>Texto de ejemplo: <span style="color:var(--text)">var(--text)</span></p>
-					<p>Botón primario: <a class="btn-primary" href="#">var(--primary)</a></p>
-				</section>
-			</main>
+            <section class="stats" id="stats-section">
+                <div class="stat-item">
+                    <div class="stat-number"><span class="counter" data-target="15000">0</span>+</div>
+                    <div class="stat-label">Usuarios Activos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><span class="counter" data-target="850">0</span>+</div>
+                    <div class="stat-label">Tutoriales y Guías</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><span class="counter" data-target="2400">0</span>+</div>
+                    <div class="stat-label">Juegos Creados</div>
+                </div>
+            </section>
 
-			<footer class="footer">
-				<p>Pie de página con colores que cumplen contraste AA.</p>
-			</footer>
-		</div>
+            <section class="carousel-container">
+                <div class="carousel-slide">
+                    <div class="carousel-item active">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Consola retro y ambiente gaming">
+                        <div class="carousel-caption">
+                            <h3>Descubre Aventuras</h3>
+                            <p>Miles de experiencias diseñadas por usuarios te esperan.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Código de programación en pantalla">
+                        <div class="carousel-caption">
+                            <h3>Crea con Luau</h3>
+                            <p>Domina la programación y da vida a tus propios juegos.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Setup de comunidad gamer">
+                        <div class="carousel-caption">
+                            <h3>Comunidad Global</h3>
+                            <p>Conecta, colabora y crece con desarrolladores de todo el mundo.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-prev">&#10094;</button>
+                <button class="carousel-next">&#10095;</button>
+                <div class="carousel-indicators">
+                    <span class="dot active" data-slide="0"></span>
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                </div>
+            </section>
 
-		<!-- Elemento de audio base para reproducir al pulsar botones.
-		     Para usar: coloca tu archivo de sonido (p.ej. sounds/click.mp3) y descomenta o añade la ruta en el atributo src.
-		     Ejemplo: <audio id="click-sound" src="Sounds/click.mp3" preload="auto"></audio>
-		-->
-		<audio id="click-sound" preload="auto"></audio>
+            <section class="features">
+                <article class="feature-card">
+                    <h3>Comunidad Activa</h3>
+                    <p>Conéctate con miles de desarrolladores en nuestros foros de Discord.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Tutoriales Pro</h3>
+                    <p>Desde conceptos básicos de diseño hasta optimización de scripts.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Recursos Gratis</h3>
+                    <p>Modelos 3D, texturas y efectos de sonido libres de derechos.</p>
+                </article>
+            </section>
 
-		<script src="JS/footer.js"></script>
-	</body>
+            <section class="faq-section">
+                <h2>Preguntas Frecuentes</h2>
+                <div class="faq-item">
+                    <button class="faq-btn">¿Es totalmente gratis unirse a la comunidad? <span>+</span></button>
+                    <div class="faq-answer"><p>Sí, el registro y acceso a todos los tutoriales, foros y recursos básicos es 100% gratuito para estudiantes y aficionados.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn">¿Necesito saber programar antes de entrar? <span>+</span></button>
+                    <div class="faq-answer"><p>No es necesario. Tenemos una ruta de aprendizaje desde cero llamada "Fundamentos de Luau" perfecta para principiantes.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-btn">¿Puedo usar estos recursos para mi proyecto de INACAP? <span>+</span></button>
+                    <div class="faq-answer"><p>¡Por supuesto! Todo el material fomenta la educación, la diversidad y el aprendizaje inclusivo, ideal para proyectos universitarios.</p></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2026 Roblox Lab - Proyecto Universitario. <span id="ojos-secretos" title="¿Buscas algo?..." style="cursor: pointer; font-size: 1.2rem; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">👀</span></p>
+
+    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
+
+	<div id="secret-corner" title="???"></div>
+     
+    <audio id="oof-sound" src="https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3" preload="auto"></audio>
+    <script src="JS/main.js"></script>
+</body>
 </html>
-
-
