@@ -102,25 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (ojosSecretos) {
         ojosSecretos.addEventListener('click', () => {
-            // Reproducir sonido "Oof" al hacer clic
+            
             if (oofSound) {
                 oofSound.currentTime = 0;
                 oofSound.play().catch(() => {});
             }
 
-            // Añadir clase para la animación de teletransporte
+            
             document.body.classList.add('efecto-teletransporte');
 
-            // Abrir el link de Rick Astley después de 1.5 segundos
+           
             setTimeout(() => {
                 window.open('https://www.youtube.com/watch?v=zu2Eaw6Ohxc', '_blank');
-                // Quitamos el efecto por si el usuario vuelve a la pestaña original
+                
                 document.body.classList.remove('efecto-teletransporte');
             }, 1500); 
         });
     }
 
-    // Easter Egg 2: Escribir "oof" en el teclado
+   
     let typedKeys = '';
     const secretWord = 'oof';
 
@@ -145,4 +145,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-}); // FIN DEL DOMContentLoaded (¡Solo debe haber uno al final!)
+}); 
