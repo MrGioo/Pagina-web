@@ -23,10 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const counters = document.querySelectorAll('.counter');
     const statsSection = document.getElementById('stats-section');
     let hasAnimated = false;
+    
+    // NUEVO: Respetar la preferencia de reducción de movimiento en la animación de contadores
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const animateCounters = () => {
         counters.forEach(counter => {
             const target = +counter.getAttribute('data-target');
+            
+            if (prefersReducedMotion) {
+                counter.innerText = target.toLocaleString();
+                return; // Muestra el número directamente si el usuario prefiere no tener animaciones
+            }
+
             const duration = 2000; 
             const increment = target / (duration / 16); 
             
@@ -57,10 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
     faqItems.forEach(item => {
         const btn = item.querySelector('.faq-btn');
         btn.addEventListener('click', () => {
+            // NUEVO: Gestión de estados aria-expanded para lectores de pantalla
+            const isCurrentlyExpanded = btn.getAttribute('aria-expanded') === 'true';
+
             faqItems.forEach(otherItem => {
-                if (otherItem !== item) otherItem.classList.remove('active');
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+                }
             });
-            item.classList.toggle('active');
+
+            if (isCurrentlyExpanded) {
+                item.classList.remove('active');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                item.classList.add('active');
+                btn.setAttribute('aria-expanded', 'true');
+            }
         });
     });
 
@@ -70,11 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function showSlide(n) {
         if(items.length === 0) return;
+        
+        // Remueve el estado activo previo
         items[index].classList.remove('active');
         dots[index].classList.remove('active');
+        dots[index].setAttribute('aria-current', 'false'); // NUEVO
+        
         index = (n + items.length) % items.length;
+        
+        // Asigna el nuevo estado activo
         items[index].classList.add('active');
         dots[index].classList.add('active');
+        dots[index].setAttribute('aria-current', 'true'); // NUEVO
     }
     
     const nextBtn = document.querySelector('.carousel-next');
@@ -84,7 +113,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prevBtn) prevBtn.addEventListener('click', () => showSlide(index - 1));
     dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
     
-    if (items.length > 0) setInterval(() => showSlide(index + 1), 5000);
+    // NUEVO: Funcionalidad para pausar el carrusel y cumplir con WCAG (control de movimiento)
+    let carouselInterval;
+    const startCarousel = () => {
+        if (items.length > 0) {
+            carouselInterval = setInterval(() => showSlide(index + 1), 5000);
+        }
+    };
+    const stopCarousel = () => {
+        clearInterval(carouselInterval);
+    };
+
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', stopCarousel);
+        carouselContainer.addEventListener('mouseleave', startCarousel);
+        carouselContainer.addEventListener('focusin', stopCarousel);
+        carouselContainer.addEventListener('focusout', startCarousel);
+    }
+    startCarousel();
 
     document.addEventListener('click', (event) => {
         if (event.target.closest('.btn-primary') || event.target.closest('.carousel-prev') || 
@@ -102,25 +149,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (ojosSecretos) {
         ojosSecretos.addEventListener('click', () => {
-            
             if (oofSound) {
                 oofSound.currentTime = 0;
                 oofSound.play().catch(() => {});
             }
 
-            
-            document.body.classList.add('efecto-teletransporte');
+            if (!prefersReducedMotion) {
+                document.body.classList.add('efecto-teletransporte');
+            }
 
-           
             setTimeout(() => {
-                window.open('https://www.youtube.com/watch?v=zu2Eaw6Ohxc', '_blank');
-                
+                window.open('https://youtu.be/bi6Q_lzaIow?si=ZsdpVNqZ3gk0J8bK', '_blank');
                 document.body.classList.remove('efecto-teletransporte');
-            }, 1500); 
+            }, prefersReducedMotion ? 100 : 1500); 
         });
     }
 
-   
     let typedKeys = '';
     const secretWord = 'oof';
 
@@ -137,12 +181,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 oofSound.play().catch(()=>{});
             }
             
+            if (!prefersReducedMotion) {
+                document.body.classList.add('shaking');
+                setTimeout(() => {
+                    document.body.classList.remove('shaking');
+                }, 500);
+            }
+        }
+    });
+});
+
+/* ... (Mantener toda la lógica de accesibilidad anterior) ... */
+
+    // NUEVO Easter Egg: Todd Howard Mode
+    let typedKeys = '';
+    const secretWord = 'oof';
+    const toddWord = 'todd';
+
+    document.addEventListener('keydown', (e) => {
+        typedKeys += e.key.toLowerCase();
+        
+        // Mantener el rastro de las últimas letras
+        if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
+        
+        // Efecto OOF (ya lo tenías)
+        if (typedKeys.endsWith(secretWord)) {
+            if (oofSound) {
+                oofSound.currentTime = 0;
+                oofSound.play().catch(()=>{});
+            }
             document.body.classList.add('shaking');
-            
-            setTimeout(() => {
-                document.body.classList.remove('shaking');
-            }, 500);
+            setTimeout(() => document.body.classList.remove('shaking'), 500);
+        }
+
+        // NUEVO: Efecto Todd Howard
+        if (typedKeys.endsWith(toddWord)) {
+            alert("It just works. Por favor, compra Skyrim otra vez.");
+            body.style.filter = "invert(1)"; // Efecto visual loco
+            setTimeout(() => body.style.filter = "none", 1000);
         }
     });
 
-}); 
+/* ... (El resto del código de carrusel y FAQ se queda igual) ... */

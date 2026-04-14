@@ -1,28 +1,26 @@
-
 :root {
-    --bg: #f8fafc;
-    --text: #0f172a;
-    --text-muted: #475569;
-    --primary: #0066cc; 
-    --primary-hover: #0052a3;
+    --bg: #f5f5dc; /* Un tono crema más cálido */
+    --text: #2d2d2a;
+    --text-muted: #5d5d5a;
+    --primary: #556b2f; /* Verde oliva (DarkOliveGreen) */
+    --primary-hover: #6b8e23;
     --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-border: #dcdcdc;
     --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --hero-bg: linear-gradient(-45deg, #e0e7ff, #f8fafc, #c7d2fe, #f1f5f9);
+    --hero-bg: linear-gradient(-45deg, #a9ba9d, #f5f5dc, #8b4513, #f5f5dc); /* Tonos tierra y verde */
 }
 
 [data-theme="dark"] {
-    --bg: #0f172a;
-    --text: #f8fafc;
-    --text-muted: #94a3b8;
-    --primary: #3b82f6; 
-    --primary-hover: #60a5fa;
-    --card-bg: #1e293b;
-    --card-border: #334155;
+    --bg: #1a1a1a;
+    --text: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --primary: #9acd32; /* Verde amarillento más brillante para el modo oscuro */
+    --primary-hover: #adff2f;
+    --card-bg: #262626;
+    --card-border: #333;
     --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    --hero-bg: linear-gradient(-45deg, #1e293b, #0f172a, #334155, #020617);
+    --hero-bg: linear-gradient(-45deg, #1a1a1a, #2d2d2a, #556b2f, #000);
 }
-
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { 
@@ -33,6 +31,13 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* NUEVO: Indicador de foco visible para navegación por teclado */
+:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
 
 .btn-primary { 
     background: var(--primary); color: #fff; padding: 0.8rem 2rem; 
@@ -74,14 +79,16 @@ body {
 
 .carousel-container { width: 100%; position: relative; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow); background: #000; margin-bottom: 4rem;}
 .carousel-slide { display: flex; height: 450px; position: relative; }
-.carousel-item { min-width: 100%; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 1; }
-.carousel-item.active { opacity: 1; z-index: 2; position: relative;}
+.carousel-item { min-width: 100%; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 1; visibility: hidden; }
+/* NUEVO: Se añade visibility para evitar que los lectores de pantalla lean diapositivas ocultas */
+.carousel-item.active { opacity: 1; z-index: 2; position: relative; visibility: visible; }
 .carousel-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
 .carousel-caption { position: absolute; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: white; width: 100%; padding: 3rem 2rem 1.5rem; text-align: center; }
 .carousel-prev, .carousel-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0, 0.6); color: white; border: none; width: 50px; height: 50px; cursor: pointer; z-index: 10; border-radius: 50%; margin: 0 15px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
 .carousel-next { right: 0; }
 .carousel-indicators { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px; }
-.dot { width: 12px; height: 12px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; }
+/* NUEVO: Ajustes en .dot para que funcione bien siendo un botón */
+.dot { width: 12px; height: 12px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; border: none; padding: 0; }
 .dot.active { background: #fff; transform: scale(1.2); }
 
 
@@ -103,36 +110,26 @@ body {
 
 .footer { background-color: #0f172a; color: #f8fafc; margin-top: 5rem; padding: 4rem 1.5rem 2rem; text-align: center; border-radius: 24px 24px 0 0; }
 
+/* NUEVO: Reset de estilos para que el botón de los ojos mantenga tu diseño original */
+#ojos-secretos {
+    background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: transform 0.3s; padding: 0; color: inherit; display: inline-block;
+}
+#ojos-secretos:hover, #ojos-secretos:focus-visible {
+    transform: scale(1.5);
+}
 
 #secret-corner {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    z-index: 9999;
-    
+    position: fixed; bottom: 0; right: 0; width: 50px; height: 50px; z-index: 9999;
 }
 
 #secret-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0); 
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
-    z-index: 10000;
-    text-align: center;
-    border: 2px solid var(--primary);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
+    background: var(--card-bg); padding: 20px; border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); z-index: 10000; text-align: center;
+    border: 2px solid var(--primary); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
-#secret-popup.show {
-    transform: translate(-50%, -50%) scale(1); 
-}
-
+#secret-popup.show { transform: translate(-50%, -50%) scale(1); }
 
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -143,25 +140,12 @@ body {
     100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
-body.shaking {
-    animation: shake 0.4s;
-    animation-iteration-count: 1;
-}
-
+body.shaking { animation: shake 0.4s; animation-iteration-count: 1; }
 
 #easter-clue {
-    cursor: help; 
-    opacity: 0.15; 
-    transition: opacity 0.4s ease, transform 0.3s ease;
-    display: inline-block;
-    margin-left: 8px;
+    cursor: help; opacity: 0.15; transition: opacity 0.4s ease, transform 0.3s ease; display: inline-block; margin-left: 8px;
 }
-
-#easter-clue:hover {
-    opacity: 1; 
-    transform: scale(1.3); 
-}
-
+#easter-clue:hover { opacity: 1; transform: scale(1.3); }
 
 @keyframes portalSuck {
     0% { transform: scale(1) rotate(0deg); filter: blur(0px) brightness(1); }
@@ -170,7 +154,42 @@ body.shaking {
 }
 
 body.efecto-teletransporte {
-    animation: portalSuck 1.5s forwards ease-in-out;
-    pointer-events: none; 
-    background-color: #000;
+    animation: portalSuck 1.5s forwards ease-in-out; pointer-events: none; background-color: #000;
+}
+
+/* NUEVO: Reglas de reducción de movimiento para cumplir con WCAG 2.2.2 */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .hero {
+        animation: none; /* Apaga el gradiente infinito */
+        background-position: 0% 50%;
+    }
+    body.efecto-teletransporte, body.shaking {
+        animation: none; /* Apaga los efectos bruscos */
+    }
+}
+
+.carousel-item.active img {
+    animation: glitch 3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0) }
+    1% { transform: translate(-2px, 2px) }
+    2% { transform: translate(2px, -2px) }
+    3% { transform: translate(0) }
+    100% { transform: translate(0) }
+}
+
+/* Modificación del Hero para que sea más dramático */
+.hero h1 span {
+    font-size: 0.8rem;
+    vertical-align: middle;
+    color: #ff4500;
+    text-transform: none;
 }

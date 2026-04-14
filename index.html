@@ -4,119 +4,116 @@
     <link rel="icon" type="image/png" href="Images/Baitybait_logo.ico">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Baity — Comunidad y Recursos</title>
+    <title>BaityBait — El Vertedero de Steam</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>Baity Lab</h1> 
+            <h1>Baity Lab <span>(Beta Rota)</span></h1> 
             <div class="nav-controls">
                 <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
-                <a class="btn-primary" href="#join">Unirse ahora</a>
+                <a class="btn-primary" href="#preorder">Precomprar Humo</a>
             </div>
         </header>
 
         <main>
             <section class="hero">
-                <h2>Explora el metaverso como nunca antes</h2>
-                <p>Descubre trucos, guías de desarrollo en Luau y únete a la comunidad de creadores más grande de la red.</p>
-                <button class="btn-primary">Empezar a explorar</button>
+                <h2>Juegos a 80 pavos y sin terminar</h2>
+                <p>Aprende a reciclar assets, abusar de los micropagos y decir que "it just works" mientras tu juego crashea en la cara de los usuarios.</p>
+                <button class="btn-primary">Ver el Vertedero</button>
             </section>
 
             <section class="stats" id="stats-section">
                 <div class="stat-item">
+                    <div class="stat-number"><span class="counter" data-target="80">0</span>€</div>
+                    <div class="stat-label">Precio Edición Estándar</div>
+                </div>
+                <div class="stat-item">
                     <div class="stat-number"><span class="counter" data-target="15000">0</span>+</div>
-                    <div class="stat-label">Usuarios Activos</div>
+                    <div class="stat-label">Bugs del Día 1</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number"><span class="counter" data-target="850">0</span>+</div>
-                    <div class="stat-label">Tutoriales y Guías</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number"><span class="counter" data-target="2400">0</span>+</div>
-                    <div class="stat-label">Juegos Creados</div>
+                    <div class="stat-number"><span class="counter" data-target="15">0</span></div>
+                    <div class="stat-label">Cuantas Vacas Tengo</div>
                 </div>
             </section>
 
-            <section class="carousel-container">
-                <div class="carousel-slide">
-                    <div class="carousel-item active">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Consola retro y ambiente gaming">
+            <section class="carousel-container" aria-roledescription="carousel" aria-label="Noticias de la industria">
+                <div class="carousel-slide" aria-live="polite" id="carousel-live-region">
+                    <div class="carousel-item active" role="group" aria-roledescription="slide" aria-label="1 de 3">
+                        <img src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/07/bethesda-game-studios-1.jpg" alt="Consola vieja quemándose">
                         <div class="carousel-caption">
-                            <h3>Descubre Aventuras</h3>
-                            <p>Miles de experiencias diseñadas por usuarios te esperan.</p>
+                            <h3>"It Just Works"</h3>
+                            <p>Bethesda lo ha vuelto a hacer: Skyrim para tu tostadora inteligente.</p>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Código de programación en pantalla">
+                    <div class="carousel-item" role="group" aria-roledescription="slide" aria-label="2 de 3">
+                        <img src="https://i.ytimg.com/vi/GlfuH8Q6WkE/maxresdefault.jpg" alt="Código con errores">
                         <div class="carousel-caption">
-                            <h3>Crea con Luau</h3>
-                            <p>Domina la programación y da vida a tus propios juegos.</p>
+                            <h3>Indie Pretencioso Starter Pack</h3>
+                            <p>Gráficos de GameBoy y mucha depresión. GOTY instantáneo.</p>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Setup de comunidad gamer">
+                    <div class="carousel-item" role="group" aria-roledescription="slide" aria-label="3 de 3">
+                        <img src="https://logos-world.net/wp-content/uploads/2022/05/Activision-Symbol.png" alt="Gente sufriendo">
                         <div class="carousel-caption">
-                            <h3>Comunidad Global</h3>
-                            <p>Conecta, colabora y crece con desarrolladores de todo el mundo.</p>
+                            <h3>Crunch Time</h3>
+                            <p>¿Dormir? Eso no está en el roadmap de la empresa.</p>
                         </div>
                     </div>
                 </div>
-                <button class="carousel-prev">&#10094;</button>
-                <button class="carousel-next">&#10095;</button>
+                <button class="carousel-prev" aria-label="Hype anterior" aria-controls="carousel-live-region">&#10094;</button>
+                <button class="carousel-next" aria-label="Siguiente retraso" aria-controls="carousel-live-region">&#10095;</button>
                 <div class="carousel-indicators">
-                    <span class="dot active" data-slide="0"></span>
-                    <span class="dot" data-slide="1"></span>
-                    <span class="dot" data-slide="2"></span>
+                    <button class="dot active" data-slide="0" aria-label="Skyrim" aria-current="true"></button>
+                    <button class="dot" data-slide="1" aria-label="Indie" aria-current="false"></button>
+                    <button class="dot" data-slide="2" aria-label="Explotación" aria-current="false"></button>
                 </div>
             </section>
 
             <section class="features">
                 <article class="feature-card">
-                    <h3>Comunidad Activa</h3>
-                    <p>Conéctate con miles de desarrolladores en nuestros foros de Discord.</p>
+                    <h3>Micropagos Abusivos</h3>
+                    <p>Skins a 20 pavos para un juego que ya te costó 80. Porque te queremos.</p>
                 </article>
                 <article class="feature-card">
-                    <h3>Tutoriales Pro</h3>
-                    <p>Desde conceptos básicos de diseño hasta optimización de scripts.</p>
+                    <h3>Pases de Batalla</h3>
+                    <p>Juega 40 horas al día para desbloquear un sombrero de color marrón.</p>
                 </article>
                 <article class="feature-card">
-                    <h3>Recursos Gratis</h3>
-                    <p>Modelos 3D, texturas y efectos de sonido libres de derechos.</p>
+                    <h3>Promesas de Molyneux</h3>
+                    <p>Cosas que nunca estarán en el juego, pero que quedan bien en el tráiler.</p>
                 </article>
             </section>
 
             <section class="faq-section">
-                <h2>Preguntas Frecuentes</h2>
+                <h2>Preguntas (No) Frecuentes</h2>
                 <div class="faq-item">
-                    <button class="faq-btn">¿Es totalmente gratis unirse a la comunidad? <span>+</span></button>
-                    <div class="faq-answer"><p>Sí, el registro y acceso a todos los tutoriales, foros y recursos básicos es 100% gratuito para estudiantes y aficionados.</p></div>
+                    <button class="faq-btn" aria-expanded="false" aria-controls="f1">¿Tiene el juego lootboxes? <span aria-hidden="true">+</span></button>
+                    <div id="f1" class="faq-answer"><p>No las llamamos lootboxes, las llamamos "mecánicas de sorpresa ética" y cuestan 2,50€ la tirada.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-btn">¿Necesito saber programar antes de entrar? <span>+</span></button>
-                    <div class="faq-answer"><p>No es necesario. Tenemos una ruta de aprendizaje desde cero llamada "Fundamentos de Luau" perfecta para principiantes.</p></div>
+                    <button class="faq-btn" aria-expanded="false" aria-controls="f2">¿Cuándo sale el parche de rendimiento? <span aria-hidden="true">+</span></button>
+                    <div id="f2" class="faq-answer"><p>Cuando el becario aprenda a optimizar el código espagueti que heredó de 2004.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-btn">¿Puedo usar estos recursos para mi proyecto de INACAP? <span>+</span></button>
-                    <div class="faq-answer"><p>¡Por supuesto! Todo el material fomenta la educación, la diversidad y el aprendizaje inclusivo, ideal para proyectos universitarios.</p></div>
+                    <button class="faq-btn" aria-expanded="false" aria-controls="f3">¿Puedo pedir reembolso? <span aria-hidden="true">+</span></button>
+                    <div id="f3" class="faq-answer"><p>Claro, pero nuestro sistema de tickets casualmente estará "en mantenimiento" durante los próximos 10 años.</p></div>
                 </div>
             </section>
         </main>
     </div>
 
-    <div class="footer-bottom">
-        <p>© 2026 Baity Lab - Proyecto. <span id="ojos-secretos" title="¿Buscas algo?..." style="cursor: pointer; font-size: 1.2rem; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">👀</span></p>
+    <footer class="footer-bottom" style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: var(--text-muted);">
+        <p>© 2026 Baity Lab - "It Just Works". <button id="ojos-secretos" title="¿Buscas el DLC?" aria-label="Descubrir secreto">👀</button></p>
+    </footer>
 
     <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
-
-	<div id="secret-corner" title="???"></div>
-     
     <audio id="oof-sound" src="https://www.myinstants.com/media/sounds/fahhhhhhhhhhhhhh.mp3" preload="auto"></audio>
     <script src="JS/main.js"></script>
 </body>
