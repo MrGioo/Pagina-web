@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
             
+    // --- GESTIÓN DE TEMA OSCURO ---
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.documentElement;
     
@@ -20,11 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- ANIMACIÓN DE CONTADORES ---
     const counters = document.querySelectorAll('.counter');
     const statsSection = document.getElementById('stats-section');
     let hasAnimated = false;
-    
-    // NUEVO: Respetar la preferencia de reducción de movimiento en la animación de contadores
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const animateCounters = () => {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (prefersReducedMotion) {
                 counter.innerText = target.toLocaleString();
-                return; // Muestra el número directamente si el usuario prefiere no tener animaciones
+                return; 
             }
 
             const duration = 2000; 
@@ -62,11 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (statsSection) observer.observe(statsSection);
 
+
+    // --- ACORDEÓN FAQ ---
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const btn = item.querySelector('.faq-btn');
         btn.addEventListener('click', () => {
-            // NUEVO: Gestión de estados aria-expanded para lectores de pantalla
             const isCurrentlyExpanded = btn.getAttribute('aria-expanded') === 'true';
 
             faqItems.forEach(otherItem => {
@@ -86,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    // --- CARRUSEL DE IMÁGENES ---
     const items = document.querySelectorAll('.carousel-item');
     const dots = document.querySelectorAll('.dot');
     let index = 0;
@@ -93,17 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function showSlide(n) {
         if(items.length === 0) return;
         
-        // Remueve el estado activo previo
         items[index].classList.remove('active');
         dots[index].classList.remove('active');
-        dots[index].setAttribute('aria-current', 'false'); // NUEVO
+        dots[index].setAttribute('aria-current', 'false'); 
         
         index = (n + items.length) % items.length;
         
-        // Asigna el nuevo estado activo
         items[index].classList.add('active');
         dots[index].classList.add('active');
-        dots[index].setAttribute('aria-current', 'true'); // NUEVO
+        dots[index].setAttribute('aria-current', 'true'); 
     }
     
     const nextBtn = document.querySelector('.carousel-next');
@@ -113,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prevBtn) prevBtn.addEventListener('click', () => showSlide(index - 1));
     dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
     
-    // NUEVO: Funcionalidad para pausar el carrusel y cumplir con WCAG (control de movimiento)
     let carouselInterval;
     const startCarousel = () => {
         if (items.length > 0) {
@@ -133,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     startCarousel();
 
+
+    // --- SISTEMA DE SONIDOS ---
     document.addEventListener('click', (event) => {
         if (event.target.closest('.btn-primary') || event.target.closest('.carousel-prev') || 
             event.target.closest('.carousel-next') || event.target.closest('.dot') || event.target.closest('.faq-btn')) {
@@ -144,9 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // --- EASTER EGGS ---
     const ojosSecretos = document.getElementById('ojos-secretos');
     const oofSound = document.getElementById('oof-sound'); 
 
+    // 1. Botón secreto del footer
     if (ojosSecretos) {
         ojosSecretos.addEventListener('click', () => {
             if (oofSound) {
@@ -165,8 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 2. Evento Teclado: Código "FAH"
     let typedKeys = '';
-    const secretWord = 'oof';
+    const secretWord = 'fah';
 
     document.addEventListener('keydown', (e) => {
         typedKeys += e.key.toLowerCase();
@@ -191,35 +197,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ... (Mantener toda la lógica de accesibilidad anterior) ... */
 
-    // NUEVO Easter Egg: Todd Howard Mode
-    let typedKeys = '';
-    const secretWord = 'oof';
-    const toddWord = 'todd';
+// --- EASTER EGG GLOBAL: Modo Todd Howard ---
+let typedKeys = '';
+const secretWord = 'fah';
+const toddWord = 'todd';
 
-    document.addEventListener('keydown', (e) => {
-        typedKeys += e.key.toLowerCase();
-        
-        // Mantener el rastro de las últimas letras
-        if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
-        
-        // Efecto OOF (ya lo tenías)
-        if (typedKeys.endsWith(secretWord)) {
-            if (oofSound) {
-                oofSound.currentTime = 0;
-                oofSound.play().catch(()=>{});
-            }
-            document.body.classList.add('shaking');
-            setTimeout(() => document.body.classList.remove('shaking'), 500);
+document.addEventListener('keydown', (e) => {
+    typedKeys += e.key.toLowerCase();
+    
+    if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
+    
+    if (typedKeys.endsWith(secretWord)) {
+        if (oofSound) {
+            oofSound.currentTime = 0;
+            oofSound.play().catch(()=>{});
         }
+        document.body.classList.add('shaking');
+        setTimeout(() => document.body.classList.remove('shaking'), 500);
+    }
 
-        // NUEVO: Efecto Todd Howard
-        if (typedKeys.endsWith(toddWord)) {
-            alert("It just works. Por favor, compra Skyrim otra vez.");
-            body.style.filter = "invert(1)"; // Efecto visual loco
-            setTimeout(() => body.style.filter = "none", 1000);
-        }
-    });
-
-/* ... (El resto del código de carrusel y FAQ se queda igual) ... */
+    if (typedKeys.endsWith(toddWord)) {
+        alert("It just works. Por favor, compra Skyrim otra vez.");
+        document.documentElement.style.filter = "invert(1)"; 
+        setTimeout(() => document.documentElement.style.filter = "none", 1000);
+    }
+});
