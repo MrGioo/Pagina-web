@@ -223,3 +223,149 @@ document.addEventListener('keydown', (e) => {
         setTimeout(() => document.documentElement.style.filter = "none", 1000);
     }
 });
+
+// =========================================
+// LÓGICA DEL FORMULARIO Y REGISTRO (LOCALSTORAGE)
+// =========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formBugs = document.getElementById('form-bugs');
+    const btnEnviarBug = document.getElementById('btn-enviar-bug');
+    const mensajeEstado = document.getElementById('mensaje-estado');
+    const oofSound = document.getElementById('oof-sound');
+
+    // Elementos del registro
+    const seccionRegistro = document.getElementById('seccion-registro');
+    const listaTickets = document.getElementById('lista-tickets');
+    const btnQuemarTickets = document.getElementById('btn-quemar-tickets');
+
+    // 1. RENDERIZAR TICKETS GUARDADOS
+    const renderizarTickets = () => {
+        const ticketsGuardados = JSON.parse(localStorage.getItem('tickets_vertedero')) || [];
+
+        if (ticketsGuardados.length === 0) {
+            if(seccionRegistro) seccionRegistro.style.display = 'none';
+            return;
+        }
+
+        if(seccionRegistro) seccionRegistro.style.display = 'block';
+        if(listaTickets) listaTickets.innerHTML = '';
+
+        ticketsGuardados.forEach(ticket => {
+            const ticketDiv = document.createElement('div');
+            ticketDiv.className = 'ticket-item';
+            ticketDiv.innerHTML = `
+                <div class="ticket-header">
+                    <span>⚠️ ${ticket.tipo}</span>
+                    <span class="ticket-fecha">${ticket.fecha}</span>
+                </div>
+                <p class="ticket-autor"><strong>De:</strong> ${ticket.nombre} (${ticket.correo})</p>
+                <div class="ticket-desc">"${ticket.descripcion}"</div>
+            `;
+            listaTickets.appendChild(ticketDiv);
+        });
+    };
+
+    // Llamamos a la función al cargar la página
+    renderizarTickets();
+
+    // 2. ENVÍO Y VALIDACIÓN DEL FORMULARIO
+    if (formBugs) {
+        formBugs.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nombreInput = document.getElementById('jugador-nombre');
+            const correoInput = document.getElementById('jugador-correo');
+            const tipoInput = document.getElementById('tipo-bug');
+            const terminosInput = document.getElementById('acepto-terminos');
+            const descInput = document.getElementById('descripcion-bug');
+
+            let formularioValido = true;
+
+            // Limpiar errores
+            document.querySelectorAll('.error-texto').forEach(el => el.classList.remove('activo'));
+            document.querySelectorAll('.input-invalido').forEach(el => el.classList.remove('input-invalido'));
+
+            const marcarError = (inputElement, idError, mensaje) => {
+                const spanError = document.getElementById(idError);
+                spanError.textContent = mensaje;
+                spanError.classList.add('activo');
+                if (inputElement) inputElement.classList.add('input-invalido');
+                formularioValido = false;
+            };
+
+            // Validaciones
+            if (nombreInput.value.trim() === '') marcarError(nombreInput, 'error-nombre', 'No me dejes esto en blanco.');
+            
+            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (correoInput.value.trim() === '') {
+                marcarError(correoInput, 'error-correo', 'Necesitamos tu correo para vender tus datos.');
+            } else if (!regexCorreo.test(correoInput.value.trim())) {
+                marcarError(correoInput, 'error-correo', 'Eso no es un correo válido. ¿Dónde está la @?');
+            }
+
+            if (tipoInput.value === '') marcarError(tipoInput, 'error-tipo', 'Selecciona un bug de la lista, no somos adivinos.');
+            
+            if (!terminosInput.checked) {
+                marcarError(null, 'error-terminos', 'Debes aceptar los términos y renunciar a tu dinero.');
+                terminosInput.classList.add('input-invalido');
+            }
+
+            if (!formularioValido) return;
+
+            // Procesar envío simulado
+            const textoOriginal = btnEnviarBug.textContent;
+            btnEnviarBug.textContent = "Procesando decepción...";
+            btnEnviarBug.style.opacity = "0.7";
+            btnEnviarBug.disabled = true;
+
+            setTimeout(() => {
+                // Guardar en LocalStorage
+                const nuevoTicket = {
+                    id: Date.now(),
+                    nombre: nombreInput.value.trim(),
+                    correo: correoInput.value.trim(),
+                    tipo: tipoInput.options[tipoInput.selectedIndex].text,
+                    descripcion: descInput.value.trim() || "El usuario no dejó descripción. Probablemente estaba llorando.",
+                    fecha: new Date().toLocaleString()
+                };
+
+                const ticketsActuales = JSON.parse(localStorage.getItem('tickets_vertedero')) || [];
+                ticketsActuales.unshift(nuevoTicket); 
+                localStorage.setItem('tickets_vertedero', JSON.stringify(ticketsActuales));
+
+                // Finalizar vista de envío
+                formBugs.reset(); 
+                btnEnviarBug.style.display = "none"; 
+                mensajeEstado.style.display = "block";
+                mensajeEstado.textContent = "¡Éxito! Tu reporte ha sido recibido e impreso en el registro.";
+                
+                if (oofSound) {
+                    oofSound.volume = 0.5;
+                    oofSound.play().catch(e => console.log("Sonido bloqueado"));
+                }
+
+                renderizarTickets(); // Actualizar panel visualmente
+
+                setTimeout(() => {
+                    mensajeEstado.style.display = "none";
+                    btnEnviarBug.style.display = "block";
+                    btnEnviarBug.textContent = textoOriginal;
+                    btnEnviarBug.style.opacity = "1";
+                    btnEnviarBug.disabled = false;
+                }, 4000);
+
+            }, 1500);
+        });
+    }
+
+    // 3. QUEMAR TICKETS
+    if (btnQuemarTickets) {
+        btnQuemarTickets.addEventListener('click', () => {
+            if(confirm("¿Estás seguro de que quieres borrar todos los reportes? (La respuesta correcta es sí).")) {
+                localStorage.removeItem('tickets_vertedero');
+                renderizarTickets(); // Ocultará la sección de nuevo
+            }
+        });
+    }
+});

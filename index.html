@@ -106,6 +106,67 @@
                     <div id="f3" class="faq-answer"><p>Claro, pero nuestro sistema de tickets casualmente estará "en mantenimiento" durante los próximos 10 años.</p></div>
                 </div>
             </section>
+           <section class="formulario-vertedero">
+    <div class="feature-card form-card">
+        <h2>Reportar Bug <span>(Va directo a la papelera)</span></h2>
+        <p class="form-desc">Déjanos tus datos. Prometemos que el becario lo leerá cuando termine de optimizar el código de 2004.</p>
+
+        <form id="form-bugs" novalidate>
+            <div class="grupo-input">
+                <label for="jugador-nombre">Nombre del incauto:</label>
+                <input type="text" id="jugador-nombre" placeholder="Ej. Todd Howard" required>
+                <span class="error-texto" id="error-nombre"></span>
+            </div>
+
+            <div class="grupo-input">
+                <label for="jugador-correo">Correo electrónico:</label>
+                <input type="email" id="jugador-correo" placeholder="tu_correo@bethesda.com" required>
+                <span class="error-texto" id="error-correo"></span>
+            </div>
+
+            <div class="grupo-input">
+                <label for="tipo-bug">¿Qué se rompió esta vez?</label>
+                <select id="tipo-bug" required>
+                    <option value="" disabled selected>Selecciona un desastre...</option>
+                    <option value="crash">El juego crashea al ver el menú</option>
+                    <option value="fisicas">El caballo está volando otra vez</option>
+                    <option value="gato">Mi gato pisó el teclado y borró los saves</option>
+                    <option value="rendimiento">Va a 15 FPS en una RTX 4090</option>
+                </select>
+                <span class="error-texto" id="error-tipo"></span>
+            </div>
+
+            <div class="grupo-input">
+                <label for="descripcion-bug">Descripción detallada (Opcional):</label>
+                <textarea id="descripcion-bug" rows="4" placeholder="Explica cómo perdiste 40 horas de progreso..."></textarea>
+            </div>
+
+            <div class="grupo-terminos">
+                <input type="checkbox" id="acepto-terminos" required>
+                <label for="acepto-terminos">Acepto los <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="link-secreto">Términos y Condiciones</a> y renuncio a mi derecho a reembolso.</label>
+            </div>
+            <span class="error-texto" id="error-terminos" style="margin-top: -1.5rem; margin-bottom: 1.5rem;"></span>
+
+            <button type="submit" class="btn-primary btn-submit" id="btn-enviar-bug">Enviar Ticket</button>
+            
+            <div id="mensaje-estado" class="mensaje-oculto" aria-live="polite"></div>
+        </form>
+    </div>
+</section>
+
+<section class="registro-tickets" id="seccion-registro" style="display: none;">
+    <div class="feature-card form-card">
+        <h2>Panel del Becario <span>(Bandeja de Entrada)</span></h2>
+        <p class="form-desc">Aquí caen los lamentos de los jugadores. Se recomienda ignorar encarecidamente.</p>
+        
+        <div id="lista-tickets" class="tickets-container">
+            </div>
+
+        <button id="btn-quemar-tickets" class="btn-primary btn-peligro" style="margin-top: 1.5rem; width: 100%;">
+            🔥 Quemar todos los reportes (Vaciar papelera)
+        </button>
+    </div>
+</section>
         </main>
     </div>
 
