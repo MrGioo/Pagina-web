@@ -17,7 +17,21 @@
             <h1>Baity Lab <span>(Beta Rota)</span></h1> 
             <div class="nav-controls">
                 <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
-                <a class="btn-primary" href="#preorder">Precomprar Humo</a>
+    <div id="authContainer" class="auth-container">
+        
+        <!-- Vista cuando NO hay sesión iniciada -->
+        <div id="guestView">
+            <button onclick="openModal('login')" class="btn">Iniciar Sesión</button>
+            <button onclick="openModal('register')" class="btn btn-outline">Registrarse</button>
+        </div>
+
+        <!-- Vista cuando SÍ hay sesión iniciada (Oculta por defecto) -->
+        <div id="loggedInView" style="display: none; align-items: center; gap: 10px;">
+            <span id="userGreeting">Bienvenido, Usuario</span>
+            <button onclick="logout()" class="btn-logout">Log out</button>
+        </div>
+
+    </div>
             </div>
         </header>
 
@@ -106,7 +120,10 @@
                     <div id="f3" class="faq-answer"><p>Claro, pero nuestro sistema de tickets casualmente estará "en mantenimiento" durante los próximos 10 años.</p></div>
                 </div>
             </section>
-           <section class="formulario-vertedero">
+            <!-- FORMULARIO -->
+             <button id="btn-mostrar-bug" class="btn-flotante">🪲 Reportar Bug</button>
+            <section class="formulario-vertedero" id="contenedor-bugs" style="display: none;">
+    <div class="feature-card form-card">
     <div class="feature-card form-card">
         <h2>Reportar Bug <span>(Va directo a la papelera)</span></h2>
         <p class="form-desc">Déjanos tus datos. Prometemos que el becario lo leerá cuando termine de optimizar el código de 2004.</p>
@@ -176,6 +193,38 @@
 
     <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
     <audio id="oof-sound" src="https://www.myinstants.com/media/sounds/fahhhhhhhhhhhhhh.mp3" preload="auto"></audio>
+    <!-- ... Aquí termina el resto del contenido de tu página (carruseles, etc.) ... -->
+
+    <!-- ========================================== -->
+    <!-- ESTE ES EL POP-UP QUE ESTÁ INVISIBLE HASTA QUE HACES CLIC -->
+    <!-- ========================================== -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Iniciar Sesión</h2>
+
+            <!-- Formulario de Login -->
+            <form id="loginForm" class="auth-form">
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <button type="submit" class="btn">Ingresar</button>
+                <p class="toggle-text">¿No tienes cuenta? <span onclick="toggleForm('register')">Regístrate aquí</span></p>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <input type="text" placeholder="Nombre completo" required>
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <button type="submit" class="btn">Crear cuenta</button>
+                <p class="toggle-text">¿Ya tienes cuenta? <span onclick="toggleForm('login')">Inicia sesión</span></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- AQUÍ CONECTAS EL JAVASCRIPT (Debe ser lo ÚLTIMO antes del body) -->
+    <!-- ========================================== -->
     <script src="JS/main.js"></script>
 </body>
 </html>

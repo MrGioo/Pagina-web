@@ -369,3 +369,140 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// --- LÓGICA DEL MODAL DE LOGIN/REGISTRO ---
+
+const modal = document.getElementById('authModal');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const modalTitle = document.getElementById('modalTitle');
+
+// Instancia del sonido incluido en tu proyecto
+const clickSound = new Audio('Sounds/click.mp3');
+
+function playClickSound() {
+    // Reproduce el sonido de click desde tu carpeta
+    clickSound.currentTime = 0; 
+    clickSound.play().catch(e => console.log("Interacción de audio bloqueada hasta que el usuario interactúe con la página"));
+}
+
+function openModal(type) {
+    playClickSound();
+    modal.style.display = 'flex'; 
+    toggleForm(type);
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+function toggleForm(type) {
+    if (type === 'login') {
+        loginForm.style.display = 'flex';
+        registerForm.style.display = 'none';
+        modalTitle.textContent = 'Iniciar Sesión';
+    } else if (type === 'register') {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'flex';
+        modalTitle.textContent = 'Registrarse';
+    }
+}
+
+// Cierra el modal al hacer clic en el fondo oscuro
+window.onclick = function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+// --- LÓGICA DE SIMULACIÓN DE SESIÓN ---
+
+const guestView = document.getElementById('guestView');
+const loggedInView = document.getElementById('loggedInView');
+
+// Función para simular el inicio de sesión
+function simulateLogin(event) {
+    event.preventDefault(); // Evita que la página se recargue al enviar el formulario
+    
+    // Reproducimos el sonido al ingresar
+    playClickSound(); 
+    
+    // Cerramos el modal
+    closeModal();
+    
+    // Ocultamos los botones de Iniciar/Registrar y mostramos el de Log Out
+    guestView.style.display = 'none';
+    loggedInView.style.display = 'flex';
+}
+
+// Función para cerrar sesión
+function logout() {
+    playClickSound();
+    
+    // Restauramos la vista original
+    loggedInView.style.display = 'none';
+    guestView.style.display = 'block';
+}
+
+// Interceptamos los envíos de los formularios del modal para activar la sesión
+document.getElementById('loginForm').addEventListener('submit', simulateLogin);
+document.getElementById('registerForm').addEventListener('submit', simulateLogin);
+
+// ==========================================
+// LÓGICA DEL FORMULARIO DE BUGS Y EASTER EGG
+// ==========================================
+
+const contenedorBugs = document.getElementById('contenedor-bugs');
+const btnMostrarBug = document.getElementById('btn-mostrar-bug');
+
+// Función principal para mostrar u ocultar el vertedero
+function toggleBugForm() {
+    if (contenedorBugs.style.display === 'none' || contenedorBugs.style.display === '') {
+        contenedorBugs.style.display = 'block';
+        // Hacemos que la página baje suavemente hasta el formulario
+        contenedorBugs.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        contenedorBugs.style.display = 'none';
+    }
+}
+
+// 1. Activar con el botón
+if (btnMostrarBug) {
+    btnMostrarBug.addEventListener('click', () => {
+        playClickSound(); // Reutilizamos tu sonido de click
+        toggleBugForm();
+    });
+}
+
+// 2. Activar escribiendo "bug" en el teclado
+let secuenciaTeclas = '';
+const palabraSecreta = 'bug';
+
+document.addEventListener('keydown', (event) => {
+    // Si el usuario está escribiendo dentro de un input (como el de login), ignoramos las teclas
+    // para evitar que el formulario salte de la nada si escriben "hambuguesa" en el registro.
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+        return;
+    }
+
+    // Guardamos la tecla presionada (en minúscula)
+    secuenciaTeclas += event.key.toLowerCase();
+
+    // Solo mantenemos en memoria las últimas 3 letras (el tamaño de "bug")
+    if (secuenciaTeclas.length > palabraSecreta.length) {
+        secuenciaTeclas = secuenciaTeclas.slice(-palabraSecreta.length);
+    }
+
+    // Si la secuencia coincide con "bug", ¡Sorpresa!
+    if (secuenciaTeclas === palabraSecreta) {
+        toggleBugForm();
+        secuenciaTeclas = ''; // Reiniciamos la secuencia por si lo quiere hacer de nuevo
+        
+        // Hacemos sonar el "Oof" como recompensa por encontrar el secreto
+        const oofSound = document.getElementById('oof-sound');
+        if (oofSound) {
+            oofSound.currentTime = 0;
+            oofSound.play().catch(e => console.log("Audio bloqueado"));
+        }
+    }
+});
