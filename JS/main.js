@@ -1,44 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-            
-    // --- GESTIÓN DE TEMA OSCURO ---
+    
+    // --- 0. CREAR CUENTA DIOS POR DEFECTO ---
+    let usuariosBD = JSON.parse(localStorage.getItem('baity_users')) || [];
+    if (!usuariosBD.find(u => u.nombre === 'Baity')) {
+        usuariosBD.push({ nombre: 'Baity', correo: 'admin@baity.com', password: '2vacas' });
+        localStorage.setItem('baity_users', JSON.stringify(usuariosBD));
+    }
+
+    // --- 1. GESTIÓN DE TEMA OSCURO ---
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.documentElement;
     
     if (localStorage.getItem('theme') === 'dark') {
         body.setAttribute('data-theme', 'dark');
-        themeToggle.textContent = '☀️';
+        if(themeToggle) themeToggle.textContent = '☀️';
     }
     
-    themeToggle.addEventListener('click', () => {
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            themeToggle.textContent = '🌙';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            themeToggle.textContent = '☀️';
-        }
-    });
+    if(themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '☀️';
+            }
+        });
+    }
 
-    // --- ANIMACIÓN DE CONTADORES ---
+    // --- 2. ANIMACIÓN DE CONTADORES ---
     const counters = document.querySelectorAll('.counter');
     const statsSection = document.getElementById('stats-section');
     let hasAnimated = false;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     const animateCounters = () => {
         counters.forEach(counter => {
             const target = +counter.getAttribute('data-target');
-            
-            if (prefersReducedMotion) {
-                counter.innerText = target.toLocaleString();
-                return; 
-            }
-
             const duration = 2000; 
             const increment = target / (duration / 16); 
-            
             let current = 0;
             const updateCounter = () => {
                 current += increment;
@@ -52,457 +52,223 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCounter();
         });
     };
+    if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !hasAnimated) {
+                animateCounters();
+                hasAnimated = true; 
+            }
+        }, { threshold: 0.5 });
+        observer.observe(statsSection);
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-        if(entries[0].isIntersecting && !hasAnimated) {
-            animateCounters();
-            hasAnimated = true; 
-        }
-    }, { threshold: 0.5 });
-    
-    if (statsSection) observer.observe(statsSection);
-
-
-    // --- ACORDEÓN FAQ ---
+    // --- 3. ACORDEÓN FAQ ---
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const btn = item.querySelector('.faq-btn');
-        btn.addEventListener('click', () => {
-            const isCurrentlyExpanded = btn.getAttribute('aria-expanded') === 'true';
-
-            faqItems.forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                    otherItem.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+        if(btn) {
+            btn.addEventListener('click', () => {
+                const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isExpanded) {
+                    item.classList.add('active');
+                    btn.setAttribute('aria-expanded', 'true');
+                } else {
+                    btn.setAttribute('aria-expanded', 'false');
                 }
             });
-
-            if (isCurrentlyExpanded) {
-                item.classList.remove('active');
-                btn.setAttribute('aria-expanded', 'false');
-            } else {
-                item.classList.add('active');
-                btn.setAttribute('aria-expanded', 'true');
-            }
-        });
+        }
     });
 
-
-    // --- CARRUSEL DE IMÁGENES ---
-    const items = document.querySelectorAll('.carousel-item');
+    // --- 4. CARRUSEL ---
+    const slides = document.querySelectorAll('.carousel-item');
     const dots = document.querySelectorAll('.dot');
     let index = 0;
-    
     function showSlide(n) {
-        if(items.length === 0) return;
-        
-        items[index].classList.remove('active');
-        dots[index].classList.remove('active');
-        dots[index].setAttribute('aria-current', 'false'); 
-        
-        index = (n + items.length) % items.length;
-        
-        items[index].classList.add('active');
-        dots[index].classList.add('active');
-        dots[index].setAttribute('aria-current', 'true'); 
+        if(slides.length === 0) return;
+        slides[index].classList.remove('active');
+        if(dots[index]) dots[index].classList.remove('active');
+        index = (n + slides.length) % slides.length;
+        slides[index].classList.add('active');
+        if(dots[index]) dots[index].classList.add('active');
     }
-    
-    const nextBtn = document.querySelector('.carousel-next');
-    const prevBtn = document.querySelector('.carousel-prev');
-    
-    if (nextBtn) nextBtn.addEventListener('click', () => showSlide(index + 1));
-    if (prevBtn) prevBtn.addEventListener('click', () => showSlide(index - 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
-    
-    let carouselInterval;
-    const startCarousel = () => {
-        if (items.length > 0) {
-            carouselInterval = setInterval(() => showSlide(index + 1), 5000);
-        }
-    };
-    const stopCarousel = () => {
-        clearInterval(carouselInterval);
-    };
+    document.querySelector('.carousel-next')?.addEventListener('click', () => showSlide(index + 1));
+    document.querySelector('.carousel-prev')?.addEventListener('click', () => showSlide(index - 1));
 
-    const carouselContainer = document.querySelector('.carousel-container');
-    if (carouselContainer) {
-        carouselContainer.addEventListener('mouseenter', stopCarousel);
-        carouselContainer.addEventListener('mouseleave', startCarousel);
-        carouselContainer.addEventListener('focusin', stopCarousel);
-        carouselContainer.addEventListener('focusout', startCarousel);
-    }
-    startCarousel();
-
-
-    // --- SISTEMA DE SONIDOS ---
-    document.addEventListener('click', (event) => {
-        if (event.target.closest('.btn-primary') || event.target.closest('.carousel-prev') || 
-            event.target.closest('.carousel-next') || event.target.closest('.dot') || event.target.closest('.faq-btn')) {
-            const audio = document.getElementById('click-sound');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(() => {});
-            }
-        }
-    });
-
-
-    // --- EASTER EGGS ---
-    const ojosSecretos = document.getElementById('ojos-secretos');
-    const oofSound = document.getElementById('oof-sound'); 
-
-    // 1. Botón secreto del footer
-    if (ojosSecretos) {
-        ojosSecretos.addEventListener('click', () => {
-            if (oofSound) {
-                oofSound.currentTime = 0;
-                oofSound.play().catch(() => {});
-            }
-
-            if (!prefersReducedMotion) {
-                document.body.classList.add('efecto-teletransporte');
-            }
-
-            setTimeout(() => {
-                window.open('https://youtu.be/bi6Q_lzaIow?si=ZsdpVNqZ3gk0J8bK', '_blank');
-                document.body.classList.remove('efecto-teletransporte');
-            }, prefersReducedMotion ? 100 : 1500); 
-        });
-    }
-
-    // 2. Evento Teclado: Código "FAH"
-    let typedKeys = '';
-    const secretWord = 'fah';
-
-    document.addEventListener('keydown', (e) => {
-        typedKeys += e.key.toLowerCase();
-        
-        if (typedKeys.length > secretWord.length) {
-            typedKeys = typedKeys.slice(-secretWord.length);
-        }
-        
-        if (typedKeys === secretWord) {
-            if (oofSound) {
-                oofSound.currentTime = 0;
-                oofSound.play().catch(()=>{});
-            }
-            
-            if (!prefersReducedMotion) {
-                document.body.classList.add('shaking');
-                setTimeout(() => {
-                    document.body.classList.remove('shaking');
-                }, 500);
-            }
-        }
-    });
-});
-
-
-// --- EASTER EGG GLOBAL: Modo Todd Howard ---
-let typedKeys = '';
-const secretWord = 'fah';
-const toddWord = 'todd';
-
-document.addEventListener('keydown', (e) => {
-    typedKeys += e.key.toLowerCase();
-    
-    if (typedKeys.length > 10) typedKeys = typedKeys.slice(-10);
-    
-    if (typedKeys.endsWith(secretWord)) {
-        if (oofSound) {
-            oofSound.currentTime = 0;
-            oofSound.play().catch(()=>{});
-        }
-        document.body.classList.add('shaking');
-        setTimeout(() => document.body.classList.remove('shaking'), 500);
-    }
-
-    if (typedKeys.endsWith(toddWord)) {
-        alert("It just works. Por favor, compra Skyrim otra vez.");
-        document.documentElement.style.filter = "invert(1)"; 
-        setTimeout(() => document.documentElement.style.filter = "none", 1000);
-    }
-});
-
-// =========================================
-// LÓGICA DEL FORMULARIO Y REGISTRO (LOCALSTORAGE)
-// =========================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    const formBugs = document.getElementById('form-bugs');
-    const btnEnviarBug = document.getElementById('btn-enviar-bug');
-    const mensajeEstado = document.getElementById('mensaje-estado');
+    // --- 5. SONIDOS Y EASTER EGGS ---
     const oofSound = document.getElementById('oof-sound');
+    document.getElementById('ojos-secretos')?.addEventListener('click', () => {
+        oofSound?.play();
+        document.body.classList.add('efecto-teletransporte');
+        setTimeout(() => {
+            window.open('https://youtu.be/bi6Q_lzaIow?si=ZsdpVNqZ3gk0J8bK', '_blank');
+            document.body.classList.remove('efecto-teletransporte');
+        }, 1500);
+    });
 
-    // Elementos del registro
-    const seccionRegistro = document.getElementById('seccion-registro');
-    const listaTickets = document.getElementById('lista-tickets');
-    const btnQuemarTickets = document.getElementById('btn-quemar-tickets');
+    // --- 6. FORMULARIO DE BUGS ---
+    const formBugs = document.getElementById('form-bugs');
+    const btnMostrarBug = document.getElementById('btn-mostrar-bug');
+    const contenedorBugs = document.getElementById('contenedor-bugs');
 
-    // 1. RENDERIZAR TICKETS GUARDADOS
-    const renderizarTickets = () => {
-        const ticketsGuardados = JSON.parse(localStorage.getItem('tickets_vertedero')) || [];
-
-        if (ticketsGuardados.length === 0) {
-            if(seccionRegistro) seccionRegistro.style.display = 'none';
-            return;
-        }
-
-        if(seccionRegistro) seccionRegistro.style.display = 'block';
-        if(listaTickets) listaTickets.innerHTML = '';
-
-        ticketsGuardados.forEach(ticket => {
-            const ticketDiv = document.createElement('div');
-            ticketDiv.className = 'ticket-item';
-            ticketDiv.innerHTML = `
-                <div class="ticket-header">
-                    <span>⚠️ ${ticket.tipo}</span>
-                    <span class="ticket-fecha">${ticket.fecha}</span>
-                </div>
-                <p class="ticket-autor"><strong>De:</strong> ${ticket.nombre} (${ticket.correo})</p>
-                <div class="ticket-desc">"${ticket.descripcion}"</div>
-            `;
-            listaTickets.appendChild(ticketDiv);
-        });
+    window.toggleBugForm = function() {
+        if (!contenedorBugs) return;
+        contenedorBugs.style.display = (contenedorBugs.style.display === 'none' || contenedorBugs.style.display === '') ? 'block' : 'none';
+        if (contenedorBugs.style.display === 'block') contenedorBugs.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Llamamos a la función al cargar la página
-    renderizarTickets();
+    btnMostrarBug?.addEventListener('click', window.toggleBugForm);
 
-    // 2. ENVÍO Y VALIDACIÓN DEL FORMULARIO
-    if (formBugs) {
-        formBugs.addEventListener('submit', (e) => {
-            e.preventDefault();
+    formBugs?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-enviar-bug');
+        const originalText = btn.textContent;
+        btn.textContent = "Ignorando reporte...";
+        btn.disabled = true;
 
-            const nombreInput = document.getElementById('jugador-nombre');
-            const correoInput = document.getElementById('jugador-correo');
-            const tipoInput = document.getElementById('tipo-bug');
-            const terminosInput = document.getElementById('acepto-terminos');
-            const descInput = document.getElementById('descripcion-bug');
-
-            let formularioValido = true;
-
-            // Limpiar errores
-            document.querySelectorAll('.error-texto').forEach(el => el.classList.remove('activo'));
-            document.querySelectorAll('.input-invalido').forEach(el => el.classList.remove('input-invalido'));
-
-            const marcarError = (inputElement, idError, mensaje) => {
-                const spanError = document.getElementById(idError);
-                spanError.textContent = mensaje;
-                spanError.classList.add('activo');
-                if (inputElement) inputElement.classList.add('input-invalido');
-                formularioValido = false;
+        setTimeout(() => {
+            const nuevoTicket = {
+                id: Date.now(),
+                nombre: document.getElementById('jugador-nombre').value,
+                correo: document.getElementById('jugador-correo').value,
+                tipo: document.getElementById('tipo-bug').value,
+                descripcion: document.getElementById('descripcion-bug').value || "Sin descripción.",
+                fecha: new Date().toLocaleString()
             };
+            const tickets = JSON.parse(localStorage.getItem('tickets_vertedero')) || [];
+            tickets.unshift(nuevoTicket);
+            localStorage.setItem('tickets_vertedero', JSON.stringify(tickets));
 
-            // Validaciones
-            if (nombreInput.value.trim() === '') marcarError(nombreInput, 'error-nombre', 'No me dejes esto en blanco.');
+            formBugs.reset();
+            // Restaurar campos bloqueados tras el envío si hay sesión
+            const sesion = JSON.parse(localStorage.getItem('baity_sesion_activa'));
+            if(sesion) {
+                const nInput = document.getElementById('jugador-nombre');
+                const cInput = document.getElementById('jugador-correo');
+                if(nInput) { nInput.value = sesion.nombre; nInput.readOnly = true; nInput.style.opacity = '0.7'; }
+                if(cInput) { cInput.value = sesion.correo; cInput.readOnly = true; cInput.style.opacity = '0.7'; }
+            }
             
-            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (correoInput.value.trim() === '') {
-                marcarError(correoInput, 'error-correo', 'Necesitamos tu correo para vender tus datos.');
-            } else if (!regexCorreo.test(correoInput.value.trim())) {
-                marcarError(correoInput, 'error-correo', 'Eso no es un correo válido. ¿Dónde está la @?');
-            }
-
-            if (tipoInput.value === '') marcarError(tipoInput, 'error-tipo', 'Selecciona un bug de la lista, no somos adivinos.');
-            
-            if (!terminosInput.checked) {
-                marcarError(null, 'error-terminos', 'Debes aceptar los términos y renunciar a tu dinero.');
-                terminosInput.classList.add('input-invalido');
-            }
-
-            if (!formularioValido) return;
-
-            // Procesar envío simulado
-            const textoOriginal = btnEnviarBug.textContent;
-            btnEnviarBug.textContent = "Procesando decepción...";
-            btnEnviarBug.style.opacity = "0.7";
-            btnEnviarBug.disabled = true;
-
-            setTimeout(() => {
-                // Guardar en LocalStorage
-                const nuevoTicket = {
-                    id: Date.now(),
-                    nombre: nombreInput.value.trim(),
-                    correo: correoInput.value.trim(),
-                    tipo: tipoInput.options[tipoInput.selectedIndex].text,
-                    descripcion: descInput.value.trim() || "El usuario no dejó descripción. Probablemente estaba llorando.",
-                    fecha: new Date().toLocaleString()
-                };
-
-                const ticketsActuales = JSON.parse(localStorage.getItem('tickets_vertedero')) || [];
-                ticketsActuales.unshift(nuevoTicket); 
-                localStorage.setItem('tickets_vertedero', JSON.stringify(ticketsActuales));
-
-                // Finalizar vista de envío
-                formBugs.reset(); 
-                btnEnviarBug.style.display = "none"; 
-                mensajeEstado.style.display = "block";
-                mensajeEstado.textContent = "¡Éxito! Tu reporte ha sido recibido e impreso en el registro.";
-                
-                if (oofSound) {
-                    oofSound.volume = 0.5;
-                    oofSound.play().catch(e => console.log("Sonido bloqueado"));
-                }
-
-                renderizarTickets(); // Actualizar panel visualmente
-
-                setTimeout(() => {
-                    mensajeEstado.style.display = "none";
-                    btnEnviarBug.style.display = "block";
-                    btnEnviarBug.textContent = textoOriginal;
-                    btnEnviarBug.style.opacity = "1";
-                    btnEnviarBug.disabled = false;
-                }, 4000);
-
-            }, 1500);
-        });
-    }
-
-    // 3. QUEMAR TICKETS
-    if (btnQuemarTickets) {
-        btnQuemarTickets.addEventListener('click', () => {
-            if(confirm("¿Estás seguro de que quieres borrar todos los reportes? (La respuesta correcta es sí).")) {
-                localStorage.removeItem('tickets_vertedero');
-                renderizarTickets(); // Ocultará la sección de nuevo
-            }
-        });
-    }
-});
-
-// --- LÓGICA DEL MODAL DE LOGIN/REGISTRO ---
-
-const modal = document.getElementById('authModal');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const modalTitle = document.getElementById('modalTitle');
-
-// Instancia del sonido incluido en tu proyecto
-const clickSound = new Audio('Sounds/click.mp3');
-
-function playClickSound() {
-    // Reproduce el sonido de click desde tu carpeta
-    clickSound.currentTime = 0; 
-    clickSound.play().catch(e => console.log("Interacción de audio bloqueada hasta que el usuario interactúe con la página"));
-}
-
-function openModal(type) {
-    playClickSound();
-    modal.style.display = 'flex'; 
-    toggleForm(type);
-}
-
-function closeModal() {
-    modal.style.display = 'none';
-}
-
-function toggleForm(type) {
-    if (type === 'login') {
-        loginForm.style.display = 'flex';
-        registerForm.style.display = 'none';
-        modalTitle.textContent = 'Iniciar Sesión';
-    } else if (type === 'register') {
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'flex';
-        modalTitle.textContent = 'Registrarse';
-    }
-}
-
-// Cierra el modal al hacer clic en el fondo oscuro
-window.onclick = function(event) {
-    if (event.target === modal) {
-        closeModal();
-    }
-}
-
-// --- LÓGICA DE SIMULACIÓN DE SESIÓN ---
-
-const guestView = document.getElementById('guestView');
-const loggedInView = document.getElementById('loggedInView');
-
-// Función para simular el inicio de sesión
-function simulateLogin(event) {
-    event.preventDefault(); // Evita que la página se recargue al enviar el formulario
-    
-    // Reproducimos el sonido al ingresar
-    playClickSound(); 
-    
-    // Cerramos el modal
-    closeModal();
-    
-    // Ocultamos los botones de Iniciar/Registrar y mostramos el de Log Out
-    guestView.style.display = 'none';
-    loggedInView.style.display = 'flex';
-}
-
-// Función para cerrar sesión
-function logout() {
-    playClickSound();
-    
-    // Restauramos la vista original
-    loggedInView.style.display = 'none';
-    guestView.style.display = 'block';
-}
-
-// Interceptamos los envíos de los formularios del modal para activar la sesión
-document.getElementById('loginForm').addEventListener('submit', simulateLogin);
-document.getElementById('registerForm').addEventListener('submit', simulateLogin);
-
-// ==========================================
-// LÓGICA DEL FORMULARIO DE BUGS Y EASTER EGG
-// ==========================================
-
-const contenedorBugs = document.getElementById('contenedor-bugs');
-const btnMostrarBug = document.getElementById('btn-mostrar-bug');
-
-// Función principal para mostrar u ocultar el vertedero
-function toggleBugForm() {
-    if (contenedorBugs.style.display === 'none' || contenedorBugs.style.display === '') {
-        contenedorBugs.style.display = 'block';
-        // Hacemos que la página baje suavemente hasta el formulario
-        contenedorBugs.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        contenedorBugs.style.display = 'none';
-    }
-}
-
-// 1. Activar con el botón
-if (btnMostrarBug) {
-    btnMostrarBug.addEventListener('click', () => {
-        playClickSound(); // Reutilizamos tu sonido de click
-        toggleBugForm();
+            btn.textContent = "¡Enviado a la basura!";
+            setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
+        }, 1000);
     });
-}
 
-// 2. Activar escribiendo "bug" en el teclado
-let secuenciaTeclas = '';
-const palabraSecreta = 'bug';
-
-document.addEventListener('keydown', (event) => {
-    // Si el usuario está escribiendo dentro de un input (como el de login), ignoramos las teclas
-    // para evitar que el formulario salte de la nada si escriben "hambuguesa" en el registro.
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-        return;
-    }
-
-    // Guardamos la tecla presionada (en minúscula)
-    secuenciaTeclas += event.key.toLowerCase();
-
-    // Solo mantenemos en memoria las últimas 3 letras (el tamaño de "bug")
-    if (secuenciaTeclas.length > palabraSecreta.length) {
-        secuenciaTeclas = secuenciaTeclas.slice(-palabraSecreta.length);
-    }
-
-    // Si la secuencia coincide con "bug", ¡Sorpresa!
-    if (secuenciaTeclas === palabraSecreta) {
-        toggleBugForm();
-        secuenciaTeclas = ''; // Reiniciamos la secuencia por si lo quiere hacer de nuevo
+    // --- 7. SISTEMA DE SESIÓN (LOGIN / LOGOUT / INTERFAZ) ---
+    window.iniciarSesionUI = function(usuario) {
+        localStorage.setItem('baity_sesion_activa', JSON.stringify(usuario));
         
-        // Hacemos sonar el "Oof" como recompensa por encontrar el secreto
-        const oofSound = document.getElementById('oof-sound');
-        if (oofSound) {
-            oofSound.currentTime = 0;
-            oofSound.play().catch(e => console.log("Audio bloqueado"));
+        const greeting = document.getElementById('userGreeting');
+        const gView = document.getElementById('guestView');
+        const lView = document.getElementById('loggedInView');
+        const btnBug = document.getElementById('btn-mostrar-bug');
+        const navUl = document.querySelector('.main-nav ul');
+
+        if(greeting) greeting.textContent = `Bienvenido, ${usuario.nombre}`;
+        if(gView) gView.style.display = 'none';
+        if(lView) lView.style.display = 'flex';
+
+        // Lógica Baity (Admin)
+        if (usuario.nombre === 'Baity') {
+            if (!document.getElementById('link-admin-secreto')) {
+                const adminLi = document.createElement('li');
+                adminLi.id = 'link-admin-secreto';
+                adminLi.innerHTML = `<a href="Admin/admin.html" style="color: #ff4500; font-weight: 800; border: 1px solid #ff4500; padding: 5px 10px; border-radius: 5px;">⚙️ PANEL DIOS</a>`;
+                navUl?.appendChild(adminLi);
+            }
+            if(btnBug) btnBug.style.display = 'none';
+        } else {
+            // Usuario Normal: Mostrar botón y AUTOCOMPLETAR
+            if(btnBug) btnBug.style.display = 'block';
+            
+            const nInput = document.getElementById('jugador-nombre');
+            const cInput = document.getElementById('jugador-correo');
+            if(nInput) { 
+                nInput.value = usuario.nombre; 
+                nInput.readOnly = true; 
+                nInput.style.opacity = '0.7'; 
+                nInput.style.cursor = 'not-allowed';
+            }
+            if(cInput) { 
+                cInput.value = usuario.correo; 
+                cInput.readOnly = true; 
+                cInput.style.opacity = '0.7'; 
+                cInput.style.cursor = 'not-allowed';
+            }
         }
-    }
+    };
+
+    window.logout = function() {
+        localStorage.removeItem('baity_sesion_activa');
+        document.getElementById('link-admin-secreto')?.remove();
+        
+        const lView = document.getElementById('loggedInView');
+        const gView = document.getElementById('guestView');
+        const btnBug = document.getElementById('btn-mostrar-bug');
+        const cBugs = document.getElementById('contenedor-bugs');
+
+        if(lView) lView.style.display = 'none';
+        if(gView) gView.style.display = 'flex';
+        if(btnBug) btnBug.style.display = 'none';
+        if(cBugs) cBugs.style.display = 'none';
+        
+        // Limpiar y desbloquear inputs al salir
+        const nInput = document.getElementById('jugador-nombre');
+        const cInput = document.getElementById('jugador-correo');
+        if(nInput) { nInput.value = ''; nInput.readOnly = false; nInput.style.opacity = '1'; nInput.style.cursor = 'text'; }
+        if(cInput) { cInput.value = ''; cInput.readOnly = false; cInput.style.opacity = '1'; cInput.style.cursor = 'text'; }
+    };
+
+    // Listeners para formularios de autenticación
+    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nombre = this.querySelector('input[type="text"]').value;
+        const correo = this.querySelector('input[type="email"]').value;
+        const password = this.querySelector('input[type="password"]').value;
+        let users = JSON.parse(localStorage.getItem('baity_users')) || [];
+        if(users.find(u => u.correo === correo)) return alert("Correo ya registrado");
+        const newUser = { nombre, correo, password };
+        users.push(newUser);
+        localStorage.setItem('baity_users', JSON.stringify(users));
+        iniciarSesionUI(newUser);
+        window.closeModal();
+    });
+
+    document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const correo = this.querySelector('input[type="email"]').value;
+        const password = this.querySelector('input[type="password"]').value;
+        const users = JSON.parse(localStorage.getItem('baity_users')) || [];
+        const user = users.find(u => u.correo === correo && u.password === password);
+        if(user) { iniciarSesionUI(user); window.closeModal(); } else { alert("Datos incorrectos"); }
+    });
+
+    // Restaurar sesión al cargar si existe
+    const sesion = JSON.parse(localStorage.getItem('baity_sesion_activa'));
+    if(sesion) iniciarSesionUI(sesion);
 });
+
+// Funciones globales para el Modal (necesarias para los onclick del HTML)
+window.openModal = function(type) {
+    const modal = document.getElementById('authModal');
+    if(modal) modal.style.display = 'flex';
+    
+    const lForm = document.getElementById('loginForm');
+    const rForm = document.getElementById('registerForm');
+    const title = document.getElementById('modalTitle');
+
+    if(type === 'login') {
+        if(lForm) lForm.style.display = 'flex';
+        if(rForm) rForm.style.display = 'none';
+        if(title) title.textContent = 'Iniciar Sesión';
+    } else {
+        if(lForm) lForm.style.display = 'none';
+        if(rForm) rForm.style.display = 'flex';
+        if(title) title.textContent = 'Registrarse';
+    }
+};
+
+window.closeModal = function() { 
+    const modal = document.getElementById('authModal');
+    if(modal) modal.style.display = 'none'; 
+};

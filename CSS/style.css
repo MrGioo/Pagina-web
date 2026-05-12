@@ -54,13 +54,74 @@ body {
 }
 .theme-toggle:hover { transform: scale(1.1); }
 
-/* --- SECCIONES PRINCIPALES --- */
-.header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; }
-.header h1 { font-size: 1.75rem; color: var(--primary); text-transform: uppercase; font-weight: 800; }
+/* --- SCROLL SUAVE Y ESPACIADO DEL MENÚ --- */
+html {
+    scroll-behavior: smooth; 
+    scroll-padding-top: 80px; /* Reducido para que calce con el menú más fino */
+}
+
+/* --- CABECERA Y MENÚ DE NAVEGACIÓN --- */
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 0.4rem 0; /* Menú mucho más delgado */
+    position: sticky;
+    top: 0;
+    background-color: var(--bg); 
+    z-index: 9999; 
+    border-bottom: 1px solid var(--card-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.header h1 { font-size: 1.3rem; color: var(--primary); text-transform: uppercase; font-weight: 800; } /* Título más pequeño */
+.header h1 span { font-size: 0.7rem; vertical-align: middle; color: #ff4500; text-transform: none; }
+
 .nav-controls { display: flex; gap: 1rem; align-items: center; }
 
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.2rem; /* Enlaces más juntitos */
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9rem; /* Letras de navegación más pequeñas */
+    transition: color 0.3s ease;
+    padding: 0.3rem;
+}
+
+.main-nav ul li a:hover, .main-nav ul li a:focus {
+    color: var(--primary);
+}
+
+/* Diseño adaptativo (Responsive) para pantallas pequeñas */
+@media (max-width: 900px) {
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        position: relative; 
+        padding: 1rem 0;
+    }
+    
+    .main-nav ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* --- SECCIONES PRINCIPALES (AHORA CON MUCHO MÁS ESPACIO) --- */
 .hero { 
-    text-align: center; padding: 6rem 1rem; border-radius: 24px; margin: 1rem 0 3rem; 
+    text-align: center; 
+    padding: 10rem 1rem; /* Más altura */
+    border-radius: 24px; 
+    margin: 2rem 0 8rem; /* Más separación inferior */
     background: var(--hero-bg); background-size: 400% 400%;
     animation: gradientBG 15s ease infinite; border: 1px solid var(--card-border);
 }
@@ -71,20 +132,19 @@ body {
 }
 .hero h2 { font-size: 3rem; margin-bottom: 1rem; font-weight: 800; letter-spacing: -1px; }
 .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 2.5rem; }
-.hero h1 span { font-size: 0.8rem; vertical-align: middle; color: #ff4500; text-transform: none; }
 
-.stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; margin: 4rem 0; }
+.stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; margin: 10rem 0; } /* Margen gigante de 10rem */
 .stat-item { text-align: center; }
 .stat-number { font-size: 3rem; font-weight: 800; color: var(--primary); }
 .stat-label { font-size: 1.1rem; color: var(--text-muted); font-weight: 600; }
 
-.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 4rem 0; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin: 12rem 0; } /* Margen gigante de 12rem */
 .feature-card { padding: 2rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
 .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
 .feature-card h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.4rem; }
 
 /* --- CARRUSEL --- */
-.carousel-container { width: 100%; position: relative; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow); background: #000; margin-bottom: 4rem;}
+.carousel-container { width: 100%; position: relative; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow); background: #000; margin-bottom: 10rem;} /* Separación de 10rem abajo */
 .carousel-slide { display: flex; height: 450px; position: relative; }
 .carousel-item { min-width: 100%; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 1; visibility: hidden; }
 .carousel-item.active { opacity: 1; z-index: 2; position: relative; visibility: visible; }
@@ -108,7 +168,7 @@ body {
 }
 
 /* --- FAQ --- */
-.faq-section { max-width: 800px; margin: 5rem auto; }
+.faq-section { max-width: 800px; margin: 12rem auto; } /* Margen gigante de 12rem */
 .faq-section h2 { text-align: center; margin-bottom: 2rem; font-size: 2rem; }
 .faq-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
 .faq-btn { width: 100%; text-align: left; padding: 1.5rem; font-size: 1.1rem; font-weight: 600; background: none; border: none; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
@@ -184,9 +244,9 @@ body.efecto-teletransporte {
 /* --- ESTILOS DEL MODAL (ESTÉTICA INDUSTRIAL BAITY LAB) --- */
 
 :root {
-    --baity-orange: #ff8c00; /* Naranja industrial para contraste */
-    --baity-dark: #1a1a1a;   /* Fondo oscuro para el modal */
-    --baity-green: #2ecc71;  /* El verde de tu página */
+    --baity-orange: #ff8c00; 
+    --baity-dark: #1a1a1a;   
+    --baity-green: #2ecc71;  
 }
 
 .btn {
@@ -194,7 +254,7 @@ body.efecto-teletransporte {
     margin: 10px;
     border: none;
     background-color: var(--baity-orange);
-    color: #000; /* Texto negro para máximo contraste sobre el naranja */
+    color: #000; 
     font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
@@ -205,7 +265,7 @@ body.efecto-teletransporte {
 
 .btn:hover { 
     background-color: #ffa500; 
-    transform: translateY(-2px); /* Pequeño salto al pasar el mouse */
+    transform: translateY(-2px); 
 }
 
 .btn-outline {
@@ -227,7 +287,7 @@ body.efecto-teletransporte {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo un poco más oscuro */
+    background-color: rgba(0, 0, 0, 0.8); 
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease-in-out;
@@ -235,14 +295,14 @@ body.efecto-teletransporte {
 
 .modal-content {
     background-color: var(--baity-dark);
-    color: #fff; /* Texto blanco para el modo oscuro */
-    border: 2px solid var(--baity-green); /* Borde verde para conectar con tu página */
+    color: #fff; 
+    border: 2px solid var(--baity-green); 
     padding: 30px;
     border-radius: 8px;
     width: 350px;
     text-align: center;
     position: relative;
-    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3); /* Brillo verde sutil */
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3); 
     animation: slideUp 0.3s ease-in-out;
 }
 
@@ -266,7 +326,7 @@ body.efecto-teletransporte {
 
 .auth-form input {
     padding: 10px;
-    background-color: #333; /* Inputs oscuros */
+    background-color: #333; 
     border: 1px solid #555;
     color: #fff;
     border-radius: 4px;
@@ -274,7 +334,7 @@ body.efecto-teletransporte {
 }
 
 .auth-form input:focus {
-    border-color: var(--baity-green); /* Se iluminan de verde al escribir */
+    border-color: var(--baity-green); 
     outline: none;
 }
 
@@ -284,7 +344,7 @@ body.efecto-teletransporte {
 }
 
 .toggle-text span {
-    color: var(--baity-green); /* Link en verde */
+    color: var(--baity-green); 
     cursor: pointer;
     text-decoration: underline;
 }
@@ -306,7 +366,7 @@ body.efecto-teletransporte {
 
 .btn-logout {
     padding: 6px 12px;
-    background-color: #dc3545; /* Mantenemos el rojo de alerta */
+    background-color: #dc3545; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -324,26 +384,25 @@ body.efecto-teletransporte {
 #userGreeting {
     font-size: 14px;
     font-weight: bold;
-    color: #fff; /* Blanco para que se lea bien en tu header oscuro */
+    color: #fff; 
 }
+
 /* ========================================= */
 /* RESTAURACIÓN DEL FORMULARIO DE BUGS       */
 /* ========================================= */
 
-/* Contenedor principal del formulario */
 .form-card {
-    background-color: #1f1f1f; /* Fondo oscuro grisáceo */
+    background-color: #1f1f1f; 
     padding: 30px;
     border-radius: 8px;
     max-width: 900px; 
     width: 100%;      
-    margin: 0 auto; /* Para centrar la tarjeta en la pantalla */
-    text-align: left; /* Obligamos a que el texto vuelva a la izquierda */
+    margin: 0 auto; 
+    text-align: left; 
 }
 
-/* Título y subtítulo del formulario */
 .form-card h2 {
-    color: #9acd32; /* El verde característico del Antes */
+    color: #9acd32; 
     text-align: center;
     margin-bottom: 5px;
 }
@@ -362,7 +421,6 @@ body.efecto-teletransporte {
     font-size: 0.9em;
 }
 
-/* Grupos de inputs (Etiqueta + Campo) */
 .grupo-input {
     margin-bottom: 20px;
     text-align: left;
@@ -376,35 +434,32 @@ body.efecto-teletransporte {
     font-size: 0.95em;
 }
 
-/* Estilo de las cajas de texto, selector y área de texto */
 .grupo-input input[type="text"],
 .grupo-input input[type="email"],
 .grupo-input select,
 .grupo-input textarea {
-    width: 100%; /* Para que ocupen todo el ancho disponible */
+    width: 100%; 
     padding: 12px;
-    background-color: #141414; /* Fondo casi negro de los inputs */
-    border: 1px solid #333; /* Borde sutil oscuro */
+    background-color: #141414; 
+    border: 1px solid #333; 
     border-radius: 6px;
     color: #fff;
     font-family: inherit;
     font-size: 14px;
-    box-sizing: border-box; /* Evita que el padding rompa el 100% de ancho */
+    box-sizing: border-box; 
     transition: border-color 0.3s ease;
 }
 
-/* Efecto al hacer clic en un input */
 .grupo-input input:focus,
 .grupo-input select:focus,
 .grupo-input textarea:focus {
     outline: none;
-    border-color: #9acd32; /* Se ilumina en verde */
+    border-color: #9acd32; 
 }
 
-/* Estilo para el checkbox de términos */
 .grupo-terminos {
     display: flex;
-    align-items: center; /* Alinea el cuadrito con el texto */
+    align-items: center; 
     gap: 10px;
     margin-bottom: 20px;
     color: #aaa;
@@ -418,15 +473,14 @@ body.efecto-teletransporte {
 }
 
 .grupo-terminos a.link-secreto {
-    color: #9acd32; /* Link verde */
+    color: #9acd32; 
     text-decoration: underline;
 }
 
-/* Botón de enviar gigante */
 .btn-submit {
-    width: 100%; /* Ocupa todo el ancho */
+    width: 100%; 
     padding: 15px;
-    background-color: #9acd32; /* Verde brillante */
+    background-color: #9acd32; 
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -437,10 +491,9 @@ body.efecto-teletransporte {
 }
 
 .btn-submit:hover {
-    background-color: #88b729; /* Un verde un poco más oscuro al pasar el mouse */
+    background-color: #88b729; 
 }
 
-/* Botón flotante para reportar bugs */
 .btn-flotante {
     position: fixed;
     bottom: 20px;
@@ -460,4 +513,13 @@ body.efecto-teletransporte {
 .btn-flotante:hover {
     background-color: #cc0000;
     transform: scale(1.05);
+}
+
+/* --- ESTILOS PARA ERRORES DE LOGIN/REGISTRO --- */
+.error-msg {
+    color: #ff4444; /* Rojo alerta */
+    font-size: 13px;
+    margin: 0;
+    font-weight: bold;
+    display: none; /* Oculto por defecto */
 }
